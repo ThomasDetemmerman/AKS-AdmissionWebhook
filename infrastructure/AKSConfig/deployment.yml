@@ -1,0 +1,25 @@
+# Deploy the Admission webhook API as a deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admission-webhook-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: admission-webhook
+  template:
+    metadata:
+      labels:
+        app: admission-webhook
+    spec:
+      containers:
+        - image: thomasdetemmerman/aksadmissioncontroller
+          name: admission-webhook
+          volumeMounts:
+            - name: tls
+              mountPath: "/etc/admission-webhook/tls"
+      volumes:
+        - name: tls
+          secret:
+            secretName: admission-webhook-TLS-secret
