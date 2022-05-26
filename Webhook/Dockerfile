@@ -10,8 +10,8 @@ WORKDIR /work
 COPY . /work
 
 # Build admission-webhook
-RUN --mount=type=cache,target=/root/.cache/go-build,sharing=private \
-  go build -o bin/admission-webhook .
+RUN --mount=type=cache,target=/root/.cache/go-build,sharing=private
+RUN go build -o bin/admission-webhook .
 
 # ---
 FROM scratch AS run
