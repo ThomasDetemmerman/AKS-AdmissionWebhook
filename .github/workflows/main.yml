@@ -47,12 +47,14 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
-      - 
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      - name: Deploys admission webhook
+        uses: Azure/k8s-deploy@v3.1
         with:
-          args: get nodes
+          action: deploy
+          manifests: infrastructure/AKSConfig/deployment.yml
+          images: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1
+
       - 
         uses: actions-hub/kubectl@master
         env:
