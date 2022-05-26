@@ -45,7 +45,7 @@ jobs:
       - 
         #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
         #https://slack.engineering/simple-kubernetes-webhook/
-        name: Generate TLS certificate
+        name: Generate, inject and deploy TLS certificate
         shell: bash
         run: |  	
           openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=admission-webhook-service.default.svc"
@@ -53,7 +53,7 @@ jobs:
           tlscrt=$(cat tls.crt | base64 -w 0)
           sed -i -- "s/#{tobeoverriden-tlscrt}#/$(echo $tlscrt)/g" infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml
          
-      - name: Deploys admission webhook
+      - name: Deploys admission webhook pods
         uses: Azure/k8s-deploy@v3.1
         with:
           action: deploy
