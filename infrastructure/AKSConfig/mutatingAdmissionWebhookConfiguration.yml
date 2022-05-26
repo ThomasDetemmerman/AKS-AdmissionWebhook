@@ -17,6 +17,6 @@ webhooks:
      service:
        namespace: default
        name: admission-webhook-service
-       path: /validate-pods
+       path: /mutate-pods
        port: 443
      caBundle: #{tobeoverriden-tlscrt}#
