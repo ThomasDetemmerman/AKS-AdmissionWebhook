@@ -30,4 +30,4 @@ jobs:
         with:
           context: Webhook
           push: true
-          tags: user/app:latest
+          tags: aksadmissioncontroller:v1
