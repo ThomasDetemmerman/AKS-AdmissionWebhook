@@ -24,3 +24,4 @@ infrastructure/AKSConfig
 sources:
 - https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
 - https://slack.engineering/simple-kubernetes-webhook/
+- https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/

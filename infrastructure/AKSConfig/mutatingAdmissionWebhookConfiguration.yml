@@ -20,3 +20,4 @@ webhooks:
        path: /mutate-pods
        port: 443
      caBundle: #{tobeoverriden-tlscrt}#
+    admissionReviewVersions: ["v1", "v1beta1"]
