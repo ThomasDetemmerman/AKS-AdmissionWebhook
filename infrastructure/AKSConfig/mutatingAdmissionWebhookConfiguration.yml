@@ -1,9 +1,9 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
- name: " custom-admission-webhook"
+ name: "customadmissionwebhook.example.com"
 webhooks:
- - name: "custom-admission-webhook.example.com"
+ - name: "customadmissionwebhook.example.com"
   #  namespaceSelector:
   #    matchLabels:
   #      admission-webhook: enabled
