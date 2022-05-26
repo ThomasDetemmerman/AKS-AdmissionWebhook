@@ -2,9 +2,9 @@
 # ---
 FROM golang:1.16 AS build
 
-ENV GOOS=linux
-ENV GOARCH=amd64
-ENV CGO_ENABLED=0
+# ENV GOOS=linux
+# ENV GOARCH=amd64
+# ENV CGO_ENABLED=0
 
 WORKDIR /work
 COPY . /work
