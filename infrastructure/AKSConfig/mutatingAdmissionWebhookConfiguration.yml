@@ -13,11 +13,13 @@ webhooks:
        operations: ["CREATE"]
        resources: ["pods"]
        scope: "*"
+   admissionReviewVersions: ["v1", "v1beta1"]
+   sideEffects: None
    clientConfig:
      service:
        namespace: default
        name: admission-webhook-service
        path: /mutate-pods
        port: 443
-     caBundle: #{tobeoverriden-tlscrt}#
-    admissionReviewVersions: ["v1", "v1beta1"]
+     caBundle: afdsfklfkdsfl//#{tobeoverriden-tlscrt}#
+    
