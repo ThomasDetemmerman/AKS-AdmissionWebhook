@@ -46,6 +46,7 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - uses: actions/checkout@v2
       - 
         #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
         #https://slack.engineering/simple-kubernetes-webhook/
