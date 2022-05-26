@@ -30,4 +30,4 @@ jobs:
         with:
           context: Webhook
           push: true
-          tags: aksadmissioncontroller:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1
