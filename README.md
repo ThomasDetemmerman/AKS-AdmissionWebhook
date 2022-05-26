@@ -15,3 +15,12 @@ Sources:
 - https://docs.docker.com/develop/develop-images/multistage-build/
 - https://slack.engineering/simple-kubernetes-webhook/
 
+## Deployment of infrastructure
+infrastructure/bicep
+
+
+## Configuring AKS
+infrastructure/AKSConfig
+sources:
+- https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
+- https://slack.engineering/simple-kubernetes-webhook/

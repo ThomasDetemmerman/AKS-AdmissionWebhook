@@ -31,3 +31,21 @@ jobs:
           context: Webhook
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1
+
+      - 
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: get pods
+
+      
+      # - 
+      #   #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
+      #   #https://slack.engineering/simple-kubernetes-webhook/
+      #   name: Generate TLS certificate
+      #   shell: bash
+      #   run: |
+          	
+      #     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=admission-webhook-service.default.svc"
+      #     kubectl create secret tls admission-webhook-TLS-secret --key="tls.key" --cert="tls.crt"
