@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |  	
           kubectl delete secret admission-webhook-tls-secret
-          openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=admission-webhook-service.default.svc"
+          openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=admission-webhook-service.default.svc" -addext "subjectAltName = DNS:admission-webhook-service.default.svc" 
           kubectl create secret tls admission-webhook-tls-secret --key="tls.key" --cert="tls.crt"
           tlscrt=$(cat tls.crt | base64 -w 0)
           sed -i -- "s/#{tobeoverriden-tlscrt}#/$(echo $tlscrt)/g" infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml

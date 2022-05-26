@@ -18,8 +18,8 @@ spec:
         - image: thomasdetemmerman/aksadmissioncontroller
           name: admission-webhook
           env:
-            - name: TLS
-              value: "true"
+          - name: TLS
+            value: "true"
           volumeMounts:
             - name: tls
               mountPath: "/etc/admission-webhook/tls"
