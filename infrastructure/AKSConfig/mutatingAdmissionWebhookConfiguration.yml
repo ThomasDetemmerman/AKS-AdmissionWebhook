@@ -3,7 +3,7 @@ kind: MutatingWebhookConfiguration
 metadata:
  name: " custom-admission-webhook"
 webhooks:
- - name: "custom-admission-webhook"
+ - name: "custom-admission-webhook.example.com"
   #  namespaceSelector:
   #    matchLabels:
   #      admission-webhook: enabled
