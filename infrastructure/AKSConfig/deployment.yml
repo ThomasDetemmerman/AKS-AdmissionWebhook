@@ -5,6 +5,7 @@ metadata:
   name: admission-webhook-deployment
   namespace: default
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: admission-webhook
@@ -16,6 +17,9 @@ spec:
       containers:
         - image: thomasdetemmerman/aksadmissioncontroller
           name: admission-webhook
+          env:
+            - name: TLS
+              value: "true"
           volumeMounts:
             - name: tls
               mountPath: "/etc/admission-webhook/tls"
