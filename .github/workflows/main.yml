@@ -46,7 +46,14 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-
+      - 
+        #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
+        #https://slack.engineering/simple-kubernetes-webhook/
+        name: Generate TLS certificate
+        shell: bash
+        run: | 
+          ls
+          ls infrastructure
       - name: Deploys admission webhook
         uses: Azure/k8s-deploy@v3.1
         with:
