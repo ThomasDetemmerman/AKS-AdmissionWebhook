@@ -19,4 +19,4 @@ webhooks:
        name: admission-webhook-service
        path: /validate-pods
        port: 443
-     caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMzREND...
+     caBundle: #{tlscrt}#
