@@ -1,8 +1,5 @@
 name: ci
 
-env:
-  applicationversion: v1.0.1
-
 on:
   push:
     branches:
@@ -33,9 +30,10 @@ jobs:
         with:
           context: Webhook
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:$applicationversion
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.1
 
   aksdeployment:
+    needs: docker
     runs-on: ubuntu-latest
     steps:     
       - name: AKS login
@@ -71,7 +69,7 @@ jobs:
           action: deploy
           manifests: infrastructure/AKSConfig/deployment.yml
           images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:$applicationversion
+            ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.1
       
       - name: Deploys service
         uses: Azure/k8s-deploy@v3.1
