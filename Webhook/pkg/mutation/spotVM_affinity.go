@@ -26,19 +26,29 @@ func (a affinity) Mutate(pod *corev1.Pod) (*corev1.Pod, error) {
 
 	spotvmAffinity := corev1.Affinity{
 		NodeAffinity: &corev1.NodeAffinity{
-			RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-				NodeSelectorTerms: []corev1.NodeSelectorTerm{{
+			RequiredDuringSchedulingIgnoredDuringExecution: nil, /*&corev1.NodeSelector{
+			NodeSelectorTerms: []corev1.NodeSelectorTerm{{
+				MatchExpressions: []corev1.NodeSelectorRequirement{{
+					Key:      "kubernetes.azure.com/scalesetpriority",
+					Operator: corev1.NodeSelectorOpIn,
+					Values:   []string{"Spot"},
+				}},
+				MatchFields: nil,
+			}}},*/
+			PreferredDuringSchedulingIgnoredDuringExecution: []corev1.PreferredSchedulingTerm{{
+				Weight: 1,
+				Preference: corev1.NodeSelectorTerm{
 					MatchExpressions: []corev1.NodeSelectorRequirement{{
 						Key:      "kubernetes.azure.com/scalesetpriority",
 						Operator: corev1.NodeSelectorOpIn,
 						Values:   []string{"Spot"},
 					}},
 					MatchFields: nil,
-				}}},
-			PreferredDuringSchedulingIgnoredDuringExecution: nil,
+				},
+			}},
 		},
 	}
-	//todo this will override affinities. You should merge match expressions
+	//todo this will override affinities. You should merge match expressons
 	mpod.Spec.Affinity = &spotvmAffinity
 	return mpod, nil
 }
