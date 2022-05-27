@@ -30,7 +30,7 @@ func (a affinity) Mutate(pod *corev1.Pod) (*corev1.Pod, error) {
 				NodeSelectorTerms: []corev1.NodeSelectorTerm{{
 					MatchExpressions: []corev1.NodeSelectorRequirement{{
 						Key:      "kubernetes.azure.com/scalesetpriority",
-						Operator: "In",
+						Operator: corev1.NodeSelectorOpIn,
 						Values:   []string{"Spot"},
 					}},
 					MatchFields: nil,
