@@ -97,14 +97,12 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - name: creating test pod
-        shell: bash
-        run: |  	
-          kubectl run test --image nginx --namespace application
+
       - name: Testing
         shell: bash
         run: |  	
           podname="test_deletemeiffound_$RANDOM"
+          kubectl run $podname --image nginx --namespace application
           r=$( kubectl get pod $podname -n application -o jsonpath='{.spec.affinity.nodeAffinity}')
           if [ -z $r ]; then echo "node affinity was not found" && failed="true"; else echo "node affinity OK"; fi
           r=$(kubectl get pod $podname -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}')
