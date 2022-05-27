@@ -4,9 +4,9 @@ metadata:
  name: "customadmissionwebhook.example.com"
 webhooks:
  - name: "customadmissionwebhook.example.com"
-  #  namespaceSelector:
-  #    matchLabels:
-  #      admission-webhook: enabled
+   namespaceSelector:
+      matchLabels:
+        admission-webhook: enabled
    rules:
      - apiGroups: [""]
        apiVersions: ["v1"]

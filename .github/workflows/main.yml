@@ -55,7 +55,13 @@ jobs:
           kubectl create secret tls admission-webhook-tls-secret --key="tls.key" --cert="tls.crt"
           tlscrt=$(cat tls.crt | base64 -w 0)
           sed -i -- "s/#{tobeoverriden-tlscrt}#/$(echo $tlscrt)/g" infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml
-         
+       
+      - name: Deploys namespaces
+        uses: Azure/k8s-deploy@v3.1
+        with:
+          action: deploy
+          manifests: infrastructure/AKSConfig/namespaces.yml 
+
       - name: Deploys admission webhook pods
         uses: Azure/k8s-deploy@v3.1
         with:
