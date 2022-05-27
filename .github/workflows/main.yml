@@ -99,11 +99,11 @@ jobs:
       - name: Testing
         shell: bash
         run: |  	
-          r=$( kubectl get pod test -n application -o jsonpath='{.spec.affinity.nodeAffinity}')
+          podname="test_deletemeiffound_$RANDOM"
+          r=$( kubectl get pod $podname -n application -o jsonpath='{.spec.affinity.nodeAffinity}')
           if [ -z $r ]; then echo "node affinity was not found" && failed="true"; else echo "node affinity OK"; fi
-          kubectl get pod test -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}'
-          r=$(kubectl get pod test -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}')
+          r=$(kubectl get pod $podname -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}')
           if [ -z $r ]; then echo "tolerations was not found" && failed="true"; else echo "tolerations OK"; fi
-          kubectl delete pod test -n application
+          kubectl delete $podname test -n application
           failed="true"
           if [ $failed ]; then echo "failing..." && exit 1; fi
