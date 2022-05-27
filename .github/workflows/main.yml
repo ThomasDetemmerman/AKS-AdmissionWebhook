@@ -105,5 +105,4 @@ jobs:
           r=$(kubectl get pod $podname -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}')
           if [ -z $r ]; then echo "tolerations was not found" && failed="true"; else echo "tolerations OK"; fi
           kubectl delete $podname test -n application
-          failed="true"
           if [ $failed ]; then echo "failing..." && exit 1; fi
