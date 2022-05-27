@@ -107,5 +107,5 @@ jobs:
           if [ -z $r ]; then echo "node affinity was not found" && failed="true"; else echo "node affinity OK"; fi
           r=$(kubectl get pod $podname -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}')
           if [ -z $r ]; then echo "tolerations was not found" && failed="true"; else echo "tolerations OK"; fi
-          kubectl delete $podname test -n application
+          kubectl delete pod $podname -n application
           if [ $failed ]; then echo "failing..." && exit 1; fi
