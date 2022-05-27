@@ -37,7 +37,7 @@ func (mpl minLifespanTolerations) Mutate(pod *corev1.Pod) (*corev1.Pod, error) {
 		    effect: "NoSchedule"
 	*/
 	tn := []corev1.Toleration{{
-		Key:      "kubernetes.azure.com/scalesetpriority ",
+		Key:      "kubernetes.azure.com/scalesetpriority",
 		Operator: corev1.TolerationOpEqual,
 		Value:    "spot",
 		Effect:   corev1.TaintEffectNoSchedule,
