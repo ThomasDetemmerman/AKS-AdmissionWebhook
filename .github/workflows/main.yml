@@ -101,7 +101,7 @@ jobs:
       - name: Testing
         shell: bash
         run: |  	
-          podname="test_deletemeiffound_$RANDOM"
+          podname="test-deletemeiffound-$RANDOM"
           kubectl run $podname --image nginx --namespace application
           r=$( kubectl get pod $podname -n application -o jsonpath='{.spec.affinity.nodeAffinity}')
           if [ -z $r ]; then echo "node affinity was not found" && failed="true"; else echo "node affinity OK"; fi
