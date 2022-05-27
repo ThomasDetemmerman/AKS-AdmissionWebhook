@@ -6,34 +6,85 @@ on:
       - 'main'
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      -
-        name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: Webhook
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.2
+  # docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     -
+  #       name: Checkout
+  #       uses: actions/checkout@v2
+  #     -
+  #       name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v2
+  #     -
+  #       name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #     -
+  #       name: Login to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     -
+  #       name: Build and push
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         context: Webhook
+  #         push: true
+  #         tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.2
 
-  aksdeployment:
-    needs: docker
+  # aksdeployment:
+  #   needs: docker
+  #   runs-on: ubuntu-latest
+  #   steps:     
+  #     - name: AKS login
+  #       uses: azure/k8s-set-context@v2
+  #       with:
+  #         method: kubeconfig
+  #         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+  #     - uses: actions/checkout@v2
+     
+  #     #todo make idempotent
+  #     - 
+  #       #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
+  #       #https://slack.engineering/simple-kubernetes-webhook/
+  #       #https://stackoverflow.com/questions/64814173/how-do-i-use-sans-with-openssl-instead-of-common-name
+  #       name: Generate, inject and deploy TLS certificate
+  #       shell: bash
+  #       run: |  	
+  #         kubectl delete secret admission-webhook-tls-secret
+  #         openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=admission-webhook-service.default.svc" -addext "subjectAltName = DNS:admission-webhook-service.default.svc" 
+  #         kubectl create secret tls admission-webhook-tls-secret --key="tls.key" --cert="tls.crt"
+  #         tlscrt=$(cat tls.crt | base64 -w 0)
+  #         sed -i -- "s/#{tobeoverriden-tlscrt}#/$(echo $tlscrt)/g" infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml
+       
+  #     - name: Deploys namespaces
+  #       uses: Azure/k8s-deploy@v3.1
+  #       with:
+  #         action: deploy
+  #         manifests: infrastructure/AKSConfig/namespaces.yml 
+
+  #     - name: Deploys admission webhook pods
+  #       uses: Azure/k8s-deploy@v3.1
+  #       with:
+  #         action: deploy
+  #         manifests: infrastructure/AKSConfig/deployment.yml
+  #         images: |
+  #           ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.2
+      
+  #     - name: Deploys service
+  #       uses: Azure/k8s-deploy@v3.1
+  #       with:
+  #         action: deploy
+  #         manifests: infrastructure/AKSConfig/service.yml 
+
+  #     - name: Deploy mutatingAdmissionWebhookConfiguration
+  #       uses: Azure/k8s-deploy@v3.1
+  #       with:
+  #         action: deploy
+  #         manifests: infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml 
+
+  test:
+    # needs: aksdeployment
     runs-on: ubuntu-latest
     steps:     
       - name: AKS login
@@ -41,45 +92,16 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - uses: actions/checkout@v2
-     
-      #todo make idempotent
-      - 
-        #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
-        #https://slack.engineering/simple-kubernetes-webhook/
-        #https://stackoverflow.com/questions/64814173/how-do-i-use-sans-with-openssl-instead-of-common-name
-        name: Generate, inject and deploy TLS certificate
+      - name: creating test pod
         shell: bash
         run: |  	
-          kubectl delete secret admission-webhook-tls-secret
-          openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=admission-webhook-service.default.svc" -addext "subjectAltName = DNS:admission-webhook-service.default.svc" 
-          kubectl create secret tls admission-webhook-tls-secret --key="tls.key" --cert="tls.crt"
-          tlscrt=$(cat tls.crt | base64 -w 0)
-          sed -i -- "s/#{tobeoverriden-tlscrt}#/$(echo $tlscrt)/g" infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml
-       
-      - name: Deploys namespaces
-        uses: Azure/k8s-deploy@v3.1
-        with:
-          action: deploy
-          manifests: infrastructure/AKSConfig/namespaces.yml 
-
-      - name: Deploys admission webhook pods
-        uses: Azure/k8s-deploy@v3.1
-        with:
-          action: deploy
-          manifests: infrastructure/AKSConfig/deployment.yml
-          images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.2
-      
-      - name: Deploys service
-        uses: Azure/k8s-deploy@v3.1
-        with:
-          action: deploy
-          manifests: infrastructure/AKSConfig/service.yml 
-
-      - name: Deploy mutatingAdmissionWebhookConfiguration
-        uses: Azure/k8s-deploy@v3.1
-        with:
-          action: deploy
-          manifests: infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml 
-
+          kubectl run test --image nginx --namespace application
+      - name: Testing
+        shell: bash
+        run: |  	
+          r=$( kubectl get pod test -n application -o jsonpath='{.spec.affinity.nodeAffinity}')
+          if [ -z $r ]; then echo "node affinity was not found" && failed="true"; else echo "node affinity OK"; fi
+          kubectl get pod test -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}'
+          r=$(kubectl get pod test -n application -o jsonpath='{.spec.tolerations[?(@.value=="spot")]}')
+          if [ -z $r ]; then echo "tolerations was not found" && failed="true"; else echo "tolerations OK"; fi
+          if [ -z $failed ]; then exit 1; fi
