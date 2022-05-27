@@ -106,4 +106,4 @@ jobs:
           if [ -z $r ]; then echo "tolerations was not found" && failed="true"; else echo "tolerations OK"; fi
           kubectl delete pod test -n application
           failed="true"
-          if [ -z $failed ]; then exit 1; fi
+          if [ -z $failed ]; then echo "failing..." && exit 1; fi
