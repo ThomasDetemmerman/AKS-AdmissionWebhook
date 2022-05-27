@@ -46,6 +46,7 @@ jobs:
       - 
         #https://shocksolution.com/2018/12/14/creating-kubernetes-secrets-using-tls-ssl-as-an-example/
         #https://slack.engineering/simple-kubernetes-webhook/
+        #https://stackoverflow.com/questions/64814173/how-do-i-use-sans-with-openssl-instead-of-common-name
         name: Generate, inject and deploy TLS certificate
         shell: bash
         run: |  	
