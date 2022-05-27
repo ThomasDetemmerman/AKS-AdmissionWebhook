@@ -70,7 +70,12 @@ jobs:
           manifests: infrastructure/AKSConfig/deployment.yml
           images: |
             ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.2
-      
+
+      - 
+        name: Restart deployment so secrets are updated
+        shell: bash
+        run: |  
+          kubectl rollout restart deployment
       - name: Deploys service
         uses: Azure/k8s-deploy@v3.1
         with:
