@@ -2,7 +2,7 @@ param name string
 param agentPoolProfiles array
 param AdminAccount string
 param K8SVersion string
-param location string = resourceGroup().location
+param location string = 'west europe' //= resourceGroup().location
 @secure()
 param AdminSSHPublicKey string
 
