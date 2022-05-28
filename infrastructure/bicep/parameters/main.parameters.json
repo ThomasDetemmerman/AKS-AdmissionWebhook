@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aksName": {
+            "value": "aks2"
+        },
+        "K8SVersion": {
+            "value": "1.21.9"
+        },
+        "AgentPoolProfiles": {
+            "value": [
+                {
+                    "PoolName": "system",
+                    "NodeCount": 1,
+                    "NodeVMSize": "Standard_D2s_v3",
+                    "NodeOSDiskType": "Managed",
+                    "NodeOSDiskSize": 128,
+                    "OSType": "Linux",
+                    "AutoscalingSettings": {
+                        "minCount": 1,
+                        "maxCount": 2
+                    },
+                    "EnableAutoscaling": true,
+                    "AvailabilityZones": [
+                        "1"
+                    ],
+                    "scaleSetPriority": "Regular",
+                    "scaleSetEvictionPolicy": "Delete",
+                    "spotMaxPrice": -1,
+                    "Mode": "System",
+                    "NodeTaints": [
+                        "CriticalAddonsOnly=true:NoSchedule"
+                    ],
+                    "NodeLabels": {
+                        "poolMode": "system"
+                    }
+                },
+                {
+                    "PoolName": "application",
+                    "NodeCount": 1,
+                    "NodeVMSize": "Standard_D2s_v3",
+                    "NodeOSDiskType": "Managed",
+                    "NodeOSDiskSize": 128,
+                    "OSType": "Linux",
+                    "AutoscalingSettings": {
+                        "minCount": 0,
+                        "maxCount": 1
+                    },
+                    "EnableAutoscaling": true,
+                    "AvailabilityZones": [
+                        "1"
+                    ],
+                    "scaleSetPriority": "Spot",
+                    "scaleSetEvictionPolicy": "Delete",
+                    "spotMaxPrice": -1,
+                    "Mode": "user",
+                    "NodeLabels": {
+                        "poolMode": "user"
+                    }
+                }
+            ]
+        },
+        "AdminAccount": {
+            "value": "#{AKS_AdminAccount}#"
+        },
+        "AdminSSHPublicKey": {
+            "value": "#{AKS_AdminSSHPublicKey}#"
+        }
+    }
+}
