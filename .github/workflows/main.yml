@@ -31,8 +31,8 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: aks2
-        template: ./infrastructure/bicep/main.bicep
-        parameters: infrastructure/bicep/parameters/main.parameters.json
+        template: ../infrastructure/bicep/main.bicep
+        parameters: ../infrastructure/bicep/parameters/main.parameters.json
         failOnStdErr: false
 
 
