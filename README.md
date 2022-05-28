@@ -5,6 +5,9 @@ An admission webhook for pod mutations in AKS
 ## CI/CD pipeline
 .github/workflows
 
+## Deploy AKS
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-github-actions?tabs=CLI
+
 ## Admission webhook in GO
 Webhook
 Sources: 

@@ -6,7 +6,33 @@ on:
       - 'main'
 
 jobs:
-  docker:
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      name: "Azure login"
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: inject secrets
+      shell: bash
+      run: |
+        sed -i -- "s/#{tobeoverwritten_AdminSSHPublicKey}#/${{ secrets.AKS_AdminSSHPublicKey }}/g" ./infrastructure/bicep/parameters/main.parameters.json
+        sed -i -- "s/#{tobeoverwritten_AdminAccount}#/${{ secrets.AKS_AdminAccount }}/g" infrastructure/bicep/parameters/main.parameters.json
+       
+    - name: deploy bicep file
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: aks2
+        template: ./infrastructure/bicep/main.bicep
+        parameters: infrastructure/bicep/parameters/main.parameters.json
+        failOnStdErr: false
+
+
+  build-webhook:
     runs-on: ubuntu-latest
     steps:
       -
@@ -32,8 +58,8 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/aksadmissioncontroller:v1.0.2
 
-  aksdeployment:
-    needs: docker
+  deploy-webhook:
+    needs: [build-webhook, deploy-infrastructure]
     runs-on: ubuntu-latest
     steps:     
       - name: AKS login
