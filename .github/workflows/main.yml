@@ -33,6 +33,7 @@ jobs:
         resourceGroupName: aks2
         template: infrastructure/bicep/templates/main.bicep
         parameters: infrastructure/bicep/parameters/main.parameters.json
+        failOnStdErr: false
 
   build-webhook:
     runs-on: ubuntu-latest
