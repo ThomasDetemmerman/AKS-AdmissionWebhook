@@ -115,7 +115,7 @@ jobs:
           manifests: infrastructure/AKSConfig/mutatingAdmissionWebhookConfiguration.yml 
 
   test:
-    needs: aksdeployment
+    needs: deploy-webhook
     runs-on: ubuntu-latest
     steps:     
       - name: AKS login
