@@ -1,7 +1,14 @@
-# AKS-AdmissionWebhook
-An admission webhook for pod mutations in AKS
+# Admission webhook
+An admission webhook for pod mutations in AKS.
 
-# Structure
+## use case
+You want to reduce cost by using spot VM's for your AKS cluster in non production evironments. Since spot vm's have a taint configured on them, you have to ask your developpers to add a toleration and node affinity to all of their deployments. Alternativally, you can enforce this using admission controllers. 
+
+## Acknowledgement
+The build-in admission controller "PodTolerationRestriction" can be used for the toleration part ([source](https://docs.microsoft.com/en-us/azure/aks/faq#what-kubernetes-admission-controllers-does-aks-support-can-admission-controllers-be-added-or-removed)). To achieve this, all your namespaces should have the proper labels ([more info](https://docs.microsoft.com/en-us/azure/aks/faq#what-kubernetes-admission-controllers-does-aks-support-can-admission-controllers-be-added-or-removed)). However, this does not cover the node affinity part. Of course, if you have only spot VM's, that issue is also resolved by itself. But what is the fun in that? So here is the solution with a custom admission webhook.
+
+
+# Guide
 ## CI/CD pipeline
 .github/workflows
 
