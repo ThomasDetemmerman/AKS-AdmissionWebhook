@@ -10,7 +10,7 @@ param AdminSSHPublicKey string
 
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-03-01' = {
   name: name
-  location: 'west europe' //= resourceGroup().location
+  location:  resourceGroup().location
   identity: {
     type: 'SystemAssigned'
   }

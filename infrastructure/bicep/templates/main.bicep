@@ -8,7 +8,7 @@ param AdminSSHPublicKey string
 
 
 module AKS '../modules/aks.bicep' = {
-  name: 
+  name: 'AKSDeployment'
   params: {
     AdminAccount: AdminAccount
     AdminSSHPublicKey: AdminSSHPublicKey
