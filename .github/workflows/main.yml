@@ -16,12 +16,16 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: inject secrets
-      shell: bash
-      run: |
-        sed -i -- "s/#{tobeoverwritten_AdminSSHPublicKey}#/${{ secrets.AKS_AdminSSHPublicKey }}/g" ./infrastructure/bicep/parameters/main.parameters.json
-        sed -i -- "s/#{tobeoverwritten_AdminAccount}#/${{ secrets.AKS_AdminAccount }}/g" infrastructure/bicep/parameters/main.parameters.json
-       
+    - uses: cschleiden/replace-tokens@v1
+      name: "inject secrets"
+      with:
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        files: '["**/*.parameters.json"]'
+      env:
+        AKS_AdminAccount: ${{ secrets.AKS_AdminAccount }
+        AKS_AdminSSHPublicKey: ${{ secrets.AKS_AdminSSHPublicKey }}
+        
     - name: deploy bicep file
       uses: azure/arm-deploy@v1
       with:
